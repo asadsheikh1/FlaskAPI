@@ -23,11 +23,11 @@ class CommentModel():
             return make_response({"message": 'No data found'}, 204)
 
     def comment_addone_model(self, data):
-        self.cur.execute(f"CALL `course_mania`.`addcomment`({data['fk_user_id']}, {data['fk_video_id']}, '{data['describe_comment']}', '{data['added_datetime']}');")
+        self.cur.execute(f"CALL `course_mania`.`addcomment`('{data['comment_description']}', '{data['added_datetime']}', {data['fk_user_id']}, {data['fk_video_id']});")
         return make_response({"message": 'Comment created successfully'}, 201)
 
     def comment_update_model(self, data):
-        self.cur.execute(f"UPDATE comment SET fk_user_id = {data['fk_user_id']}, fk_video_id = {data['fk_video_id']}, `describe_comment` = '{data['describe_comment']}', added_datetime = '{data['added_datetime']}' WHERE comment_id = {data['comment_id']};")
+        self.cur.execute(f"UPDATE comment SET comment_description = '{data['comment_description']}', added_datetime = '{data['added_datetime']}', fk_user_id = {data['fk_user_id']}, fk_video_id = {data['fk_video_id']} WHERE comment_id = {data['comment_id']};")
         if self.cur.rowcount > 0:
             return make_response({"message": 'Comment updated successfully'}, 201)
         else:

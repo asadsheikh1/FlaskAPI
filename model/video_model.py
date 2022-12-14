@@ -23,11 +23,11 @@ class VideoModel():
             return make_response({"message": 'No data found'}, 204)
 
     def video_addone_model(self, data):
-        self.cur.execute(f"CALL `course_mania`.`addvideo`('{data['title']}', '{data['video_description']}', '{data['added_datetime']}', '{data['video_path']}', {data['fk_category_id']}, {data['fk_user_id']})")
+        self.cur.execute(f"CALL `course_mania`.`addvideo`('{data['video_name']}', '{data['video_description']}', '{data['added_datetime']}', '{data['thumbnail']}', '{data['video_path']}', {data['fk_playlist_id']})")
         return make_response({"message": 'Video created successfully'}, 201)
 
     def video_update_model(self, data):
-        self.cur.execute(f"UPDATE video SET title = '{data['title']}', video_description = '{data['video_description']}', added_datetime = '{data['added_datetime']}', video_path = '{data['video_path']}', fk_category_id = '{data['fk_category_id']}' WHERE video_id = {data['video_id']}")
+        self.cur.execute(f"UPDATE video SET video_name = '{data['video_name']}', video_description = '{data['video_description']}', added_datetime = '{data['added_datetime']}', thumbnail = '{data['thumbnail']}', video_path = '{data['video_path']}', fk_playlist_id = {data['fk_playlist_id']} WHERE video_id = {data['video_id']}")
         if self.cur.rowcount > 0:
             return make_response({"message": 'Video updated successfully'}, 201)
         else:
