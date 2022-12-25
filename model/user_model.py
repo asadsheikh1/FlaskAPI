@@ -1,6 +1,8 @@
 import mysql.connector
 from flask import make_response
 from config.config import dbconfig
+from datetime import datetime, timedelta
+import jwt
 
 class UserModel():
     def __init__(self):
@@ -57,3 +59,18 @@ class UserModel():
             return make_response({"message": 'File uploaded successfully'}, 201)
         else:
             return make_response({"message": 'Nothing to update'}, 202)
+
+    def user_login_model(self, data):
+        self.cur.execute(f"SELECT user_id, user_name, email, dob, location, phone, avatar, subscriber_count, fk_role_id, is_active FROM user WHERE email = '{data['email']}' and user_password = '{data['user_password']}'")
+        result = self.cur.fetchall()
+        user_data = result[0]
+        user_id = user_data['user_id']
+        exp_time = datetime.now() + timedelta(minutes=15)
+        exp_epoch_time = int(exp_time.timestamp())
+        payload = {
+            "payload": user_data,
+            "exp": exp_epoch_time,
+        }
+        jwtoken = jwt.encode(payload, "asad", algorithm="HS256")
+        return make_response({"id": user_id, "token": jwtoken}, 200)
+        # return make_response({"token": jwtoken}, 200)
