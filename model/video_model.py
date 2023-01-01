@@ -22,8 +22,8 @@ class VideoModel():
         else:
             return make_response({"message": 'No data found'}, 204)
 
-    def video_addone_model(self, data):
-        self.cur.execute(f"CALL `course_mania`.`addvideo`('{data['video_name']}', '{data['video_description']}', '{data['added_datetime']}', '{data['thumbnail']}', '{data['video_path']}', {data['fk_playlist_id']})")
+    def video_addone_model(self, data, video_path):
+        self.cur.execute(f"CALL `course_mania`.`addvideo`('{data['video_name']}', '{data['video_description']}', '{data['added_datetime']}', '{data['thumbnail']}', '{video_path}', {data['fk_playlist_id']})")
         return make_response({"message": 'Video created successfully'}, 201)
 
     def video_update_model(self, data):

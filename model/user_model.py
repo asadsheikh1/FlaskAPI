@@ -65,6 +65,14 @@ class UserModel():
         result = self.cur.fetchall()
         user_data = result[0]
         user_id = user_data['user_id']
+        user_name = user_data['user_name']
+        email = user_data['email']
+        dob = user_data['dob']
+        location = user_data['location']
+        phone = user_data['phone']
+        avatar = user_data['avatar']
+        subscriber_count = user_data['subscriber_count']
+        fk_role_id = user_data['fk_role_id']
         exp_time = datetime.now() + timedelta(minutes=15)
         exp_epoch_time = int(exp_time.timestamp())
         payload = {
@@ -72,5 +80,4 @@ class UserModel():
             "exp": exp_epoch_time,
         }
         jwtoken = jwt.encode(payload, "asad", algorithm="HS256")
-        return make_response({"id": user_id, "token": jwtoken}, 200)
-        # return make_response({"token": jwtoken}, 200)
+        return make_response({"user_id": user_id, "user_name": user_name, "email": email, "dob": dob, "location": location, "phone": phone, "avatar": avatar, "subscriber_count": subscriber_count, "fk_role_id": fk_role_id, "token": jwtoken}, 200)

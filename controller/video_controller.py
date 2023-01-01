@@ -12,7 +12,13 @@ def video_getall_controller():
 
 @app.route('/video/add', methods=["POST"])
 def video_addone_controller():
-    return obj.video_addone_model(request.form)
+    file = request.files['video_path']
+    unique_filename = f'{datetime.now().timestamp()}'.replace('.', '')
+    filename_split = file.filename.split('.')
+    ext = filename_split[len(filename_split) - 1]
+    video_path = f'uploads/video/{unique_filename}.{ext}'
+    file.save(video_path)
+    return obj.video_addone_model(request.form, video_path)
 
 @app.route('/video/update', methods=["POST"])
 def video_update_controller():

@@ -13,7 +13,7 @@ class PlaylistModel():
             print('Some error')
 
     def playlist_getall_model(self):
-        self.cur.execute('SELECT playlist_id, playlist_name, playlist_description, cast(cost as char(13)) cost, cast(rating as char(3)) rating, fk_category_id, fk_user_id, fk_merchant_id, is_active FROM playlist')
+        self.cur.execute('SELECT playlist_id, playlist_name, playlist_description, cast(cost as char(13)) cost, cast(rating as char(3)) rating, thumbnail, fk_category_id, fk_user_id, fk_merchant_id, is_active FROM playlist')
         result = self.cur.fetchall()
         if len(result) > 0:
             res = make_response({"payload": result}, 200)
@@ -22,12 +22,12 @@ class PlaylistModel():
         else:
             return make_response({"message": 'No data found'}, 204)
 
-    def playlist_addone_model(self, data):
-        self.cur.execute(f"CALL `course_mania`.`addplaylist`('{data['playlist_name']}', '{data['playlist_description']}', '{data['cost']}', '{data['rating']}', {data['fk_category_id']}, {data['fk_user_id']}, {data['fk_merchant_id']});")
+    def playlist_addone_model(self, data, path):
+        self.cur.execute(f"CALL `course_mania`.`addplaylist`('{data['playlist_name']}', '{data['playlist_description']}', '{data['cost']}', '{data['rating']}', '{path}', {data['fk_category_id']}, {data['fk_user_id']}, {data['fk_merchant_id']});")
         return make_response({"message": 'Playlist created successfully'}, 201)
 
     def playlist_update_model(self, data):
-        self.cur.execute(f"UPDATE playlist SET playlist_name = '{data['playlist_name']}', playlist_description = '{data['playlist_description']}', cost = '{data['cost']}', rating = '{data['rating']}', fk_category_id = '{data['fk_category_id']}', fk_user_id = '{data['fk_user_id']}', fk_merchant_id = '{data['fk_merchant_id']}' WHERE playlist_id = {data['playlist_id']}")
+        self.cur.execute(f"UPDATE playlist SET playlist_name = '{data['playlist_name']}', playlist_description = '{data['playlist_description']}', cost = '{data['cost']}', rating = '{data['rating']}', thumbnail = '{data['thumbnail']}', fk_category_id = '{data['fk_category_id']}', fk_user_id = '{data['fk_user_id']}', fk_merchant_id = '{data['fk_merchant_id']}' WHERE playlist_id = {data['playlist_id']}")
         if self.cur.rowcount > 0:
             return make_response({"message": 'Playlist updated successfully'}, 201)
         else:
@@ -52,3 +52,11 @@ class PlaylistModel():
             return make_response({"message": 'Playlist updated successfully'}, 201)
         else:
             return make_response({"message": 'Nothing to update'}, 202)
+    
+    def playlist_upload_thumbnail_model(self, id, path):
+        self.cur.execute(f"UPDATE playlist SET thumbnail = '{path}' WHERE playlist_id = {id}")
+        if self.cur.rowcount > 0:
+            return make_response({"message": 'File uploaded successfully'}, 201)
+        else:
+            return make_response({"message": 'Nothing to update'}, 202)
+    

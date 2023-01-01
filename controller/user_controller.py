@@ -9,7 +9,6 @@ auth = AuthModel()
 
 
 @app.route('/user/getall')
-@auth.token_auth()
 def user_getall_controller():
     return obj.user_getall_model()
 
